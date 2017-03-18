@@ -9,11 +9,13 @@ import (
 	"strings"
 )
 
+// Public http endpoints for getting required data
 const (
 	lineURL    = "http://www.safaricom.com/bundles/js/get.jsp"
 	bundlesURL = "http://www.safaricom.com/bundles/GetSubDetails"
 )
 
+// Bundles defines the structure for bundles values returned
 type Bundles struct {
 	Line    string
 	AccType string
@@ -21,6 +23,7 @@ type Bundles struct {
 	Airtime float64
 }
 
+// GetBundles returns the bundles for the line in use
 func GetBundles() (*Bundles, error) {
 	l, err := line()
 	if err != nil {
@@ -44,7 +47,8 @@ func GetBundles() (*Bundles, error) {
 }
 
 /*
-ParseBundles parses raw bundles html to Bundles value
+ParseBundles parses raw bundles html to Bundles value, especially useful in processing data sent from clients (e.g. xhr)
+
 Example raw bundles html:
 	<table border=0 id='dataAccount'>
 	<tr><td><span>Account Types</span></td><td>Prepaid</td></tr><tr><td><span>Data Bundle</span></td><td>8056.47 MBs</td></tr><tr><td><span>Data Bundle Expiry Date </span></td><td>31-Dec-2036 19:00</td></tr><tr><td><span>Airtime Balances</span></td><td>0.03</td></tr><tr><td><span>Airtime Expiry Date </span></td><td>01-Jan-2037 00:00</td></tr>
@@ -95,6 +99,7 @@ func ParseBundles(rawBundles string) (*Bundles, error) {
 
 }
 
+// line simply returns the line, and an error if any
 func line() (string, error) {
 	resp, err := http.Get(lineURL)
 	if err != nil {
