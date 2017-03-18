@@ -1,4 +1,4 @@
-# saf 
+# saf [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat)](https://godoc.org/github.com/peteretelej/saf) [![Build Status](https://img.shields.io/travis/peteretelej/saf.svg?style=flat)](https://travis-ci.org/peteretelej/saf)
 
 A set of nifty apps and utilities for Safaricom services. _Mostly weekend projects._
 
