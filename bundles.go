@@ -47,13 +47,9 @@ func GetBundles() (*Bundles, error) {
 }
 
 /*
-ParseBundles parses raw bundles html to Bundles value, especially useful in processing data sent from clients (e.g. xhr)
-
-Example raw bundles html:
-	<table border=0 id='dataAccount'>
-	<tr><td><span>Account Types</span></td><td>Prepaid</td></tr><tr><td><span>Data Bundle</span></td><td>8056.47 MBs</td></tr><tr><td><span>Data Bundle Expiry Date </span></td><td>31-Dec-2036 19:00</td></tr><tr><td><span>Airtime Balances</span></td><td>0.03</td></tr><tr><td><span>Airtime Expiry Date </span></td><td>01-Jan-2037 00:00</td></tr>
-	<tr><td colspan=2><div id='refresh'><a href='#'>Refresh</div></td></tr>
-	<table>
+ParseBundles parses raw bundles html to Bundles value.
+Raw bundles html are as received from the Saf GetSubDetails http endpoint.
+Especially useful in processing data sent from clients (e.g. xhr)
 */
 func ParseBundles(rawBundles string) (*Bundles, error) {
 	rows := strings.Split(rawBundles, "<tr>")
