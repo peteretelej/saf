@@ -14,7 +14,7 @@ func main() {
 
 	c := color.New(color.FgGreen).Add(color.Underline)
 	c.Println("SAFARICOM BALANCE")
-	//	color.White("Safcom Line: 0%s", b.Line)
+	color.White("Safcom Line: 0%s", b.Line)
 	c = color.New(color.FgGreen).Add(color.Bold)
 	c.Printf("Data Bundles: %s\n", b.Bundles)
 	c = color.New(color.FgYellow).Add(color.Bold)
