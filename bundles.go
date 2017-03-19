@@ -2,7 +2,6 @@ package saf
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -27,7 +26,7 @@ type Bundles struct {
 func GetBundles() (*Bundles, error) {
 	l, err := line()
 	if err != nil {
-		return nil, fmt.Errorf("Unable to get line: %v", err)
+		return nil, err
 	}
 	resp, err := http.Get(bundlesURL)
 	if err != nil {
@@ -99,12 +98,16 @@ func ParseBundles(rawBundles string) (*Bundles, error) {
 func line() (string, error) {
 	resp, err := http.Get(lineURL)
 	if err != nil {
-		return "", err
+		return "", errors.New("no internet connection")
 	}
 	defer resp.Body.Close()
 	dat, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
 	}
-	return strings.TrimSpace(string(dat)), nil
+	l := strings.TrimSpace(string(dat))
+	if l == "" {
+		return "", errors.New("you aren't connected through Safaricom")
+	}
+	return l, nil
 }
