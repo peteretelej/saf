@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/peteretelej/saf"
 )
@@ -9,8 +10,8 @@ import (
 func main() {
 	b, err := saf.GetBundles()
 	if err != nil {
-		fmt.Printf("Failed to get bundles: %v\n", err)
-		return
+		fmt.Fprintf(os.Stderr, "Failed to get bundles: %v\n", err)
+		os.Exit(1)
 	}
 	b.PrettyPrint()
 
