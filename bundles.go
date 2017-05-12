@@ -3,6 +3,7 @@ package saf
 import (
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -26,26 +27,29 @@ type Bundles struct {
 	BongaBalance  string
 }
 
-// PrettyPrint prints bundles information to stdout
-func (b *Bundles) PrettyPrint() {
+// PrintTo writes bundle information to the writer
+func (b *Bundles) PrintTo(wr io.Writer) {
 	var (
 		head   = color.New(color.FgGreen, color.Bold).Add(color.Underline).SprintFunc()
 		red    = color.New(color.FgRed).SprintFunc()
 		green  = color.New(color.FgGreen).SprintFunc()
 		yellow = color.New(color.FgYellow).SprintFunc()
 	)
+	out := make([]string, 6)
 
-	fmt.Printf("\n%s\n", head("SAFARICOM BALANCE"))
+	out[0] = fmt.Sprintf("\n%s\n", head("SAFARICOM BALANCE"))
 	airtime := fmt.Sprintf("%.2f", b.Airtime)
-	fmt.Printf("Airtime Balance: %s/=\n", (airtime))
-	fmt.Printf("Data Bundles: %s\n", green(b.Bundles))
-	fmt.Printf("Bundles Expiry: %s\n\n", red(b.BundlesExpiry))
+	out[1] = fmt.Sprintf("Airtime Balance: %s/=\n", (airtime))
+	out[2] = fmt.Sprintf("Data Bundles: %s\n", green(b.Bundles))
+	out[3] = fmt.Sprintf("Bundles Expiry: %s\n\n", red(b.BundlesExpiry))
 	if b.BongaSMS != "" {
-		fmt.Printf("Bonga SMS: %s\n", yellow(b.BongaSMS))
+		out[4] = fmt.Sprintf("Bonga SMS: %s\n", yellow(b.BongaSMS))
 	}
 	if b.BongaBalance != "" {
-		fmt.Printf("Bonga Balance: %s\n", yellow(b.BongaBalance))
+		out[5] = fmt.Sprintf("Bonga Balance: %s\n", yellow(b.BongaBalance))
 	}
+	output := strings.Join(out, "\n")
+	fmt.Fprint(wr, output)
 }
 
 // GetBundles returns the bundles for the line in use
@@ -54,11 +58,12 @@ func GetBundles() (*Bundles, error) {
 	if err != nil {
 		return nil, errors.New("no internet connection")
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	dat, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
+	_ = resp.Body.Close()
 	return ParseBundles(string(dat))
 }
 
