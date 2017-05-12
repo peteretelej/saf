@@ -3,7 +3,6 @@ package saf
 import (
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -27,29 +26,27 @@ type Bundles struct {
 	BongaBalance  string
 }
 
-// PrintTo writes bundle information to the writer
-func (b *Bundles) PrintTo(wr io.Writer) {
+func (b Bundles) String() string {
 	var (
 		head   = color.New(color.FgGreen, color.Bold).Add(color.Underline).SprintFunc()
 		red    = color.New(color.FgRed).SprintFunc()
 		green  = color.New(color.FgGreen).SprintFunc()
 		yellow = color.New(color.FgYellow).SprintFunc()
 	)
-	out := make([]string, 6)
+	return fmt.Sprintf(`%s
+%s
+%s
+%s
+%s
+%s`,
+		fmt.Sprintf("%s", head("SAFARICOM BALANCE")),
+		fmt.Sprintf("Airtime Balance: %.2f/=", (b.Airtime)),
+		fmt.Sprintf("Data Bundles: %s", green(b.Bundles)),
+		fmt.Sprintf("Bundles Expiry: %s", red(b.BundlesExpiry)),
+		fmt.Sprintf("Bonga SMS: %s", yellow(b.BongaSMS)),
+		fmt.Sprintf("Bonga Balance: %s", yellow(b.BongaBalance)),
+	)
 
-	out[0] = fmt.Sprintf("\n%s\n", head("SAFARICOM BALANCE"))
-	airtime := fmt.Sprintf("%.2f", b.Airtime)
-	out[1] = fmt.Sprintf("Airtime Balance: %s/=\n", (airtime))
-	out[2] = fmt.Sprintf("Data Bundles: %s\n", green(b.Bundles))
-	out[3] = fmt.Sprintf("Bundles Expiry: %s\n\n", red(b.BundlesExpiry))
-	if b.BongaSMS != "" {
-		out[4] = fmt.Sprintf("Bonga SMS: %s\n", yellow(b.BongaSMS))
-	}
-	if b.BongaBalance != "" {
-		out[5] = fmt.Sprintf("Bonga Balance: %s\n", yellow(b.BongaBalance))
-	}
-	output := strings.Join(out, "\n")
-	fmt.Fprint(wr, output)
 }
 
 // GetBundles returns the bundles for the line in use

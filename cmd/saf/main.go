@@ -24,7 +24,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Failed to get bundles: %v\n", err)
 			os.Exit(1)
 		}
-		b.PrintTo(os.Stdout)
+		fmt.Println(b)
 	}
 
 }
