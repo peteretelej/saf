@@ -33,19 +33,24 @@ func (b Bundles) String() string {
 		green  = color.New(color.FgGreen).SprintFunc()
 		yellow = color.New(color.FgYellow).SprintFunc()
 	)
-	return fmt.Sprintf(`%s
-%s
-%s
-%s
-%s
-%s`,
-		fmt.Sprintf("%s", head("SAFARICOM BALANCE")),
-		fmt.Sprintf("Airtime Balance: %.2f/=", (b.Airtime)),
-		fmt.Sprintf("Data Bundles: %s", green(b.Bundles)),
-		fmt.Sprintf("Bundles Expiry: %s", red(b.BundlesExpiry)),
-		fmt.Sprintf("Bonga SMS: %s", yellow(b.BongaSMS)),
-		fmt.Sprintf("Bonga Balance: %s", yellow(b.BongaBalance)),
-	)
+
+	bal := head("SAFARICOM BALANCE")
+	if b.Airtime != 0 {
+		bal += fmt.Sprintf("\nAirtime Balance: %.2f/=", (b.Airtime))
+	}
+	if b.Bundles != "" {
+		bal += fmt.Sprintf("\nData Bundles: %s", green(b.Bundles))
+	}
+	if b.BundlesExpiry != "" {
+		bal += fmt.Sprintf("\nBundles Expiry: %s", red(b.BundlesExpiry))
+	}
+	if b.BongaSMS != "" {
+		bal += fmt.Sprintf("\nBonga SMS: %s", yellow(b.BongaSMS))
+	}
+	if b.BongaBalance != "" {
+		bal += fmt.Sprintf("\nBonga Balance: %s", yellow(b.BongaBalance))
+	}
+	return bal
 
 }
 
