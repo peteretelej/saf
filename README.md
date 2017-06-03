@@ -10,9 +10,13 @@ go get -u github.com/peteretelej/saf/...
 
 Usage 
 ```
-saf bundles
-# get airtime and bundle balance
+saf
+# gets remaining airtime & bundles balance 
 ```
+
+Demo
+![saf](https://cloud.githubusercontent.com/assets/2271973/26755687/61c80d38-489b-11e7-8a02-ec6c8c58fcbb.gif)
+
 
 
 # License
